@@ -630,7 +630,13 @@ async def _extract_tiktok(url: str) -> ExtractResponse:
 @app.get("/health")
 async def health_check():
     """Health check endpoint for Render."""
-    return {"status": "ok", "service": "AnySaveVid API"}
+    import yt_dlp
+    return {
+        "status": "ok",
+        "service": "AnySaveVid API",
+        "version": "2026_visionos_fixed",
+        "ytdlp": getattr(getattr(yt_dlp, "version", None), "__version__", "unknown")
+    }
 
 
 @app.post("/api/extract", response_model=ExtractResponse)
