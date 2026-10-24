@@ -8,7 +8,9 @@ import type { PlatformType } from "./components/PlatformTabs";
 import Footer from "./components/Footer";
 import { useLanguage } from "./context/LanguageContext";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.DEV ? "http://localhost:8000" : "");
 
 export default function App() {
   const { lang } = useLanguage();
