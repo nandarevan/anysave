@@ -232,8 +232,16 @@ class ExtractResponse(BaseModel):
 # ---------------------------------------------------------------------------
 # yt-dlp extraction logic
 # ---------------------------------------------------------------------------
+def _clean_url(url: str) -> str:
+    """Normalize URLs like YouTube shorts to standard watch links."""
+    clean = url.strip()
+    clean = re.sub(r"https?://(?:www\.)?youtube\.com/shorts/([a-zA-Z0-9_-]+)", r"https://www.youtube.com/watch?v=\1", clean)
+    return clean
+
+
 def _sync_extract(url: str) -> dict:
     """Synchronous extraction using yt-dlp Python module directly."""
+    url = _clean_url(url)
     ffmpeg_exe = _get_ffmpeg_path()
     is_instagram = "instagram.com" in url.lower()
     ydl_opts = {
@@ -244,6 +252,11 @@ def _sync_extract(url: str) -> dict:
         "extract_flat": False,
         "format": "all",
         "ffmpeg_location": ffmpeg_exe,
+        "extractor_args": {
+            "youtube": {
+                "player_client": ["visionos", "android"]
+            }
+        },
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         return ydl.extract_info(url, download=False)
@@ -338,13 +351,15 @@ def _build_formats(info: dict, platform: str) -> list[MediaFormat]:
     if has_real_video:
         # 1. Video (MP4)
         best_video_quality = "HD 1080p"
-        height = info.get("height")
-        if height:
-            best_video_quality = f"{height}p"
-        else:
-            heights = [f.get("height") for f in raw_formats if f.get("height")]
-            if heights:
-                best_video_quality = f"{max(heights)}p"
+        video_heights = [
+            f.get("height")
+            for f in raw_formats
+            if f.get("height") and f.get("vcodec") and f.get("vcodec") not in ("none", "mjpg")
+        ]
+        if video_heights:
+            best_video_quality = f"{max(video_heights)}p"
+        elif info.get("height") and info.get("height") > 144:
+            best_video_quality = f"{info.get('height')}p"
 
         formats.append(
             MediaFormat(
@@ -400,6 +415,7 @@ def _build_formats(info: dict, platform: str) -> list[MediaFormat]:
 # ---------------------------------------------------------------------------
 def _sync_download_video(url: str, output_template: str):
     """Download best video + audio and merge into a single standard MP4 file."""
+    url = _clean_url(url)
     ffmpeg_exe = _get_ffmpeg_path()
     ydl_opts = {
         "quiet": True,
@@ -408,6 +424,11 @@ def _sync_download_video(url: str, output_template: str):
         "format": "bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio/best[ext=mp4]/best",
         "outtmpl": output_template,
         "merge_output_format": "mp4",
+        "extractor_args": {
+            "youtube": {
+                "player_client": ["visionos", "android"]
+            }
+        },
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
@@ -415,6 +436,7 @@ def _sync_download_video(url: str, output_template: str):
 
 def _sync_download_audio(url: str, output_template: str):
     """Download audio track and convert to clean high quality MP3."""
+    url = _clean_url(url)
     ffmpeg_exe = _get_ffmpeg_path()
     ydl_opts = {
         "quiet": True,
@@ -422,6 +444,11 @@ def _sync_download_audio(url: str, output_template: str):
         "ffmpeg_location": ffmpeg_exe,
         "format": "bestaudio/best",
         "outtmpl": output_template,
+        "extractor_args": {
+            "youtube": {
+                "player_client": ["visionos", "android"]
+            }
+        },
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
