@@ -30,13 +30,6 @@ export interface Translations {
       placeholder: string;
       supported: string[];
     };
-    youtube: {
-      name: string;
-      badge: string;
-      tagline: string;
-      placeholder: string;
-      supported: string[];
-    };
     facebook: {
       name: string;
       badge: string;
@@ -112,7 +105,7 @@ export const translations: Record<Language, Translations> = {
     hero: {
       title: "Media Downloader",
       subtitle:
-        "Download video, audio, dan gambar tanpa watermark secara instan dari Instagram, TikTok, dan YouTube.",
+        "Download video, audio, dan gambar tanpa watermark secara instan dari Instagram, TikTok, dan Facebook.",
     },
     platforms: {
       selectLabel: "PILIH PLATFORM MEDIA:",
@@ -130,13 +123,6 @@ export const translations: Record<Language, Translations> = {
         tagline: "Download Video TikTok HD Tanpa Watermark & MP3",
         placeholder: "Tempel tautan TikTok (Video atau Foto slide)...",
         supported: ["Video HD Tanpa Watermark", "TikTok Foto Slide", "Audio Sound MP3"],
-      },
-      youtube: {
-        name: "YouTube",
-        badge: "Video & MP3",
-        tagline: "Download Video YouTube HD, Shorts & Audio MP3",
-        placeholder: "Tempel tautan YouTube (Video atau Shorts)...",
-        supported: ["Video MP4 HD (1080p)", "YouTube Shorts", "Audio MP3"],
       },
       facebook: {
         name: "Facebook",
@@ -181,11 +167,11 @@ export const translations: Record<Language, Translations> = {
           "Pemrosesan ekstraksi media berkecepatan tinggi dengan server teroptimasi secara instan.",
         card3Title: "Bebas Biaya",
         card3Desc:
-          "Akses ke seluruh fitur pengunduhan video Instagram, TikTok, dan YouTube tanpa batas.",
+          "Akses ke seluruh fitur pengunduhan video Instagram, TikTok, dan Facebook tanpa batas.",
       },
       col1Title: "INSTAGRAM DOWNLOADER",
       col2Title: "TIKTOK DOWNLOADER",
-      col3Title: "YOUTUBE DOWNLOADER",
+      col3Title: "FACEBOOK DOWNLOADER",
       col4Title: "FORMAT & KEUNGGULAN",
       col1Links: [
         "Download Reels Instagram",
@@ -202,11 +188,11 @@ export const translations: Record<Language, Translations> = {
         "Download Sound Musik TikTok",
       ],
       col3Links: [
-        "YouTube Video MP4 (1080p)",
-        "YouTube Shorts Downloader",
-        "YouTube ke Audio MP3",
-        "Download Thumbnail YouTube",
-        "Ekstraksi Audio Berkualitas",
+        "Facebook Video MP4 HD",
+        "Facebook Reels Downloader",
+        "Facebook Watch Downloader",
+        "Download Foto Postingan Facebook",
+        "Ekstraksi Video Berkualitas",
       ],
       col4Links: [
         "Video MP4 High Definition",
@@ -220,7 +206,7 @@ export const translations: Record<Language, Translations> = {
       copyright: "AnySaveVid. Seluruh Hak Cipta Dilindungi.",
       bannerTitle: "AnySaveVid: Platform Pengunduh Media Multi Platform Lengkap",
       bannerDesc:
-        "Toolkit online gratis untuk mengunduh video, audio, reels, shorts, dan gambar dari Instagram, TikTok, dan YouTube langsung berkualitas tinggi tanpa watermark.",
+        "Toolkit online gratis untuk mengunduh video, audio, reels, dan gambar dari Instagram, TikTok, dan Facebook langsung berkualitas tinggi tanpa watermark.",
       badgePrivate: "100% Privat",
       badgeNoWatermark: "Tanpa Watermark",
       badgeFree: "Bebas Biaya",
@@ -241,7 +227,7 @@ export const translations: Record<Language, Translations> = {
     hero: {
       title: "Media Downloader",
       subtitle:
-        "Download watermark free videos, audio, and images instantly from Instagram, TikTok, and YouTube.",
+        "Download watermark free videos, audio, and images instantly from Instagram, TikTok, and Facebook.",
     },
     platforms: {
       selectLabel: "SELECT MEDIA PLATFORM:",
@@ -259,13 +245,6 @@ export const translations: Record<Language, Translations> = {
         tagline: "Download HD TikTok Videos Without Watermark & MP3",
         placeholder: "Paste TikTok link (Video or Photo slide)...",
         supported: ["HD Watermark Free Video", "TikTok Photo Slide", "Sound MP3 Audio"],
-      },
-      youtube: {
-        name: "YouTube",
-        badge: "Video & MP3",
-        tagline: "Download HD YouTube Videos, Shorts & MP3 Audio",
-        placeholder: "Paste YouTube link (Video or Shorts)...",
-        supported: ["HD MP4 Video (1080p)", "YouTube Shorts", "MP3 Audio"],
       },
       facebook: {
         name: "Facebook",
@@ -310,11 +289,11 @@ export const translations: Record<Language, Translations> = {
           "High speed media extraction engine powered by optimized high throughput servers.",
         card3Title: "Completely Free",
         card3Desc:
-          "Unlimited access to all video and audio download features for Instagram, TikTok, and YouTube.",
+          "Unlimited access to all video and audio download features for Instagram, TikTok, and Facebook.",
       },
       col1Title: "INSTAGRAM DOWNLOADER",
       col2Title: "TIKTOK DOWNLOADER",
-      col3Title: "YOUTUBE DOWNLOADER",
+      col3Title: "FACEBOOK DOWNLOADER",
       col4Title: "FORMATS & ADVANTAGES",
       col1Links: [
         "Download Instagram Reels",
@@ -331,11 +310,11 @@ export const translations: Record<Language, Translations> = {
         "Download TikTok Sound Tracks",
       ],
       col3Links: [
-        "YouTube MP4 Video (1080p)",
-        "YouTube Shorts Downloader",
-        "YouTube to MP3 Audio",
-        "Download YouTube Thumbnail",
-        "High Quality Audio Extraction",
+        "Facebook HD MP4 Video",
+        "Facebook Reels Downloader",
+        "Facebook Watch Downloader",
+        "Download Facebook Post Photos",
+        "High Quality Media Extraction",
       ],
       col4Links: [
         "High Definition MP4 Video",
@@ -349,7 +328,7 @@ export const translations: Record<Language, Translations> = {
       copyright: "AnySaveVid. All Rights Reserved.",
       bannerTitle: "AnySaveVid: All in One Multi Platform Media Downloader",
       bannerDesc:
-        "Free online toolkit to download high quality watermark free videos, audio, reels, shorts, and photos from Instagram, TikTok, and YouTube.",
+        "Free online toolkit to download high quality watermark free videos, audio, reels, and photos from Instagram, TikTok, and Facebook.",
       badgePrivate: "100% Private",
       badgeNoWatermark: "No Watermark",
       badgeFree: "Completely Free",

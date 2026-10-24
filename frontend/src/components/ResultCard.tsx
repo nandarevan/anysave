@@ -33,8 +33,6 @@ export interface ExtractResult {
 }
 
 const PLATFORM_COLORS: Record<string, string> = {
-  youtube:
-    "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 border-red-200 dark:border-red-800",
   instagram:
     "bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300 border-pink-200 dark:border-pink-800",
   tiktok:

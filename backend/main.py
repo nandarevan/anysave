@@ -1,7 +1,7 @@
 import subprocess
 """
 AnySaveVid Backend: FastAPI + yt-dlp Media Extraction API
-Supports YouTube, Instagram, and TikTok media downloads tanpa watermark
+Supports Instagram, TikTok, and Facebook media downloads tanpa watermark
 """
 
 import os
@@ -140,13 +140,13 @@ app.add_middleware(
 # Constants & helpers
 # ---------------------------------------------------------------------------
 SUPPORTED_DOMAINS = {
-    "youtube": [
-        "youtube.com",
-        "youtu.be",
-        "www.youtube.com",
-        "m.youtube.com",
-        "youtube-nocookie.com",
-    ],
+    # "youtube": [
+    #     "youtube.com",
+    #     "youtu.be",
+    #     "www.youtube.com",
+    #     "m.youtube.com",
+    #     "youtube-nocookie.com",
+    # ],
     "instagram": [
         "instagram.com",
         "www.instagram.com",
@@ -178,7 +178,7 @@ def _get_ffmpeg_path() -> Optional[str]:
 
 
 def _detect_platform(url: str) -> Optional[str]:
-    """Return 'youtube' | 'instagram' | 'tiktok' or None."""
+    """Return 'instagram' | 'tiktok' | 'facebook' or None."""
     clean_url = url.lower()
     for platform, domains in SUPPORTED_DOMAINS.items():
         for domain in domains:
@@ -213,7 +213,7 @@ class ExtractRequest(BaseModel):
         platform = _detect_platform(v)
         if platform is None:
             raise ValueError(
-                "Tautan tidak didukung. Hanya tautan Instagram, TikTok, dan YouTube yang didukung."
+                "Tautan tidak didukung. Hanya tautan Instagram, TikTok, dan Facebook yang didukung."
             )
         return v
 
@@ -639,182 +639,160 @@ async def _extract_tiktok(url: str) -> ExtractResponse:
 
 
 
-# ---------------------------------------------------------------------------
-# Dedicated YouTube Pipeline with Multi-Client yt-dlp & Invidious Fallback
-# ---------------------------------------------------------------------------
-async def _extract_invidious(url: str) -> Optional[ExtractResponse]:
-    """Fallback extractor using Invidious API to bypass datacenter IP blocks."""
-    import urllib.request
-    import json
+# # ---------------------------------------------------------------------------
+# # Dedicated YouTube Pipeline with Multi-Client yt-dlp & Invidious Fallback
+# # ---------------------------------------------------------------------------
+# async def _extract_invidious(url: str) -> Optional[ExtractResponse]:
+#     """Fallback extractor using Invidious API to bypass datacenter IP blocks."""
+#     import urllib.request
+#     import json
 
-    m = re.search(r"(?:v=|youtu\.be/|shorts/)([a-zA-Z0-9_-]{11})", url)
-    if not m:
-        return None
-    video_id = m.group(1)
+#     m = re.search(r"(?:v=|youtu\.be/|shorts/)([a-zA-Z0-9_-]{11})", url)
+#     if not m:
+#         return None
+#     video_id = m.group(1)
 
-    instances = [
-        "https://yt.chocolatemoo53.com",
-    ]
+#     instances = [
+#         "https://yt.chocolatemoo53.com",
+#     ]
 
-    for inst in instances:
-        try:
-            api_url = f"{inst}/api/v1/videos/{video_id}"
-            req = urllib.request.Request(api_url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
-            def fetch_data():
-                with urllib.request.urlopen(req, timeout=7) as res:
-                    return json.loads(res.read().decode())
-            data = await asyncio.to_thread(fetch_data)
-            if not data or "title" not in data:
-                continue
+#     for inst in instances:
+#         try:
+#             api_url = f"{inst}/api/v1/videos/{video_id}"
+#             req = urllib.request.Request(api_url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+#             def fetch_data():
+#                 with urllib.request.urlopen(req, timeout=7) as res:
+#                     return json.loads(res.read().decode())
+#             data = await asyncio.to_thread(fetch_data)
+#             if not data or "title" not in data:
+#                 continue
 
-            formats: list[MediaFormat] = []
+#             formats: list[MediaFormat] = []
 
-            # Check muxed formatStreams first
-            for f in data.get("formatStreams", []):
-                if f.get("url"):
-                    r_lbl = f.get("resolution", "360p")
-                    formats.append(
-                        MediaFormat(
-                            format_type="video",
-                            label=f"Download Video ({r_lbl})",
-                            ext="mp4",
-                            quality=r_lbl,
-                            url=f.get("url"),
-                        )
-                    )
+#             # Check muxed formatStreams first
+#             for f in data.get("formatStreams", []):
+#                 if f.get("url"):
+#                     r_lbl = f.get("resolution", "360p")
+#                     formats.append(
+#                         MediaFormat(
+#                             format_type="video",
+#                             label=f"Download Video ({r_lbl})",
+#                             ext="mp4",
+#                             quality=r_lbl,
+#                             url=f.get("url"),
+#                         )
+#                     )
 
-            # Adaptive formats for 1080p, 720p, 480p, 360p, MP3
-            adaptive = data.get("adaptiveFormats", []) or []
-            audio_streams = [
-                f for f in adaptive
-                if "audio" in f.get("type", "") and f.get("url")
-            ]
-            best_audio = audio_streams[0] if audio_streams else None
+#             # Adaptive formats for 1080p, 720p, 480p, 360p, MP3
+#             adaptive = data.get("adaptiveFormats", []) or []
+#             audio_streams = [
+#                 f for f in adaptive
+#                 if "audio" in f.get("type", "") and f.get("url")
+#             ]
+#             best_audio = audio_streams[0] if audio_streams else None
 
-            seen_res = set(f.quality for f in formats if f.quality)
-            for res_name in ["1080p", "720p", "480p", "360p"]:
-                if res_name not in seen_res:
-                    matching_vid = [
-                        f for f in adaptive
-                        if f.get("resolution") == res_name and f.get("container") == "mp4" and f.get("url")
-                    ]
-                    if not matching_vid:
-                        matching_vid = [
-                            f for f in adaptive
-                            if f.get("resolution") == res_name and f.get("url")
-                        ]
-                    if matching_vid:
-                        v_url = matching_vid[0].get("url")
-                        mux_url = f"mux:{v_url}|{best_audio['url']}" if best_audio else v_url
-                        formats.append(
-                            MediaFormat(
-                                format_type="video",
-                                label=f"Download Video ({res_name})",
-                                ext="mp4",
-                                quality=res_name,
-                                url=mux_url,
-                            )
-                        )
-                        seen_res.add(res_name)
+#             seen_res = set(f.quality for f in formats if f.quality)
+#             for res_name in ["1080p", "720p", "480p", "360p"]:
+#                 if res_name not in seen_res:
+#                     matching_vid = [
+#                         f for f in adaptive
+#                         if f.get("resolution") == res_name and f.get("container") == "mp4" and f.get("url")
+#                     ]
+#                     if not matching_vid:
+#                         matching_vid = [
+#                             f for f in adaptive
+#                             if f.get("resolution") == res_name and f.get("url")
+#                         ]
+#                     if matching_vid:
+#                         v_url = matching_vid[0].get("url")
+#                         mux_url = f"mux:{v_url}|{best_audio['url']}" if best_audio else v_url
+#                         formats.append(
+#                             MediaFormat(
+#                                 format_type="video",
+#                                 label=f"Download Video ({res_name})",
+#                                 ext="mp4",
+#                                 quality=res_name,
+#                                 url=mux_url,
+#                             )
+#                         )
+#                         seen_res.add(res_name)
 
-            if best_audio:
-                formats.append(
-                    MediaFormat(
-                        format_type="audio",
-                        label="Download Audio (MP3)",
-                        ext="mp3",
-                        quality="192kbps",
-                        url=f"audio:{best_audio['url']}",
-                    )
-                )
+#             if best_audio:
+#                 formats.append(
+#                     MediaFormat(
+#                         format_type="audio",
+#                         label="Download Audio (MP3)",
+#                         ext="mp3",
+#                         quality="192kbps",
+#                         url=f"audio:{best_audio['url']}",
+#                     )
+#                 )
 
-            thumb = f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg"
-            formats.append(
-                MediaFormat(
-                    format_type="image",
-                    label="Download Cover (JPG)",
-                    ext="jpg",
-                    quality="Resolusi Penuh",
-                    url=thumb,
-                )
-            )
+#             thumb = f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg"
+#             formats.append(
+#                 MediaFormat(
+#                     format_type="image",
+#                     label="Download Cover (JPG)",
+#                     ext="jpg",
+#                     quality="Resolusi Penuh",
+#                     url=thumb,
+#                 )
+#             )
 
-            sec = data.get("lengthSeconds", 0)
-            return ExtractResponse(
-                success=True,
-                platform="youtube",
-                title=data.get("title", "YouTube Video"),
-                author=data.get("author", "YouTube Creator"),
-                thumbnail=thumb,
-                duration=f"{sec // 60}:{sec % 60:02d}",
-                original_url=url,
-                formats=formats,
-            )
-        except Exception as e:
-            logger.warning("Invidious instance %s error: %s", inst, e)
-            continue
+#             sec = data.get("lengthSeconds", 0)
+#             return ExtractResponse(
+#                 success=True,
+#                 platform="youtube",
+#                 title=data.get("title", "YouTube Video"),
+#                 author=data.get("author", "YouTube Creator"),
+#                 thumbnail=thumb,
+#                 duration=f"{sec // 60}:{sec % 60:02d}",
+#                 original_url=url,
+#                 formats=formats,
+#             )
+#         except Exception as e:
+#             logger.warning("Invidious instance %s error: %s", inst, e)
+#             continue
 
-    return None
+#     return None
 
 
-async def _extract_youtube(url: str) -> ExtractResponse:
-    """Robust YouTube extraction trying yt-dlp first, then Invidious fallback."""
-    # 1. Try yt-dlp
-    try:
-        info = await _extract_info(url)
-        formats = _build_formats(info, "youtube")
-        uploader = info.get("uploader") or info.get("channel") or info.get("creator")
-        title = info.get("title", "YouTube Video")
-        thumbnail = info.get("thumbnail")
-        return ExtractResponse(
-            success=True,
-            platform="youtube",
-            title=title,
-            author=uploader,
-            thumbnail=thumbnail,
-            duration=_format_duration(info.get("duration")),
-            original_url=url,
-            formats=formats,
-        )
-    except Exception as ytdl_err:
-        logger.warning("yt-dlp failed on YouTube, trying Invidious fallback: %s", ytdl_err)
+# async def _extract_youtube(url: str) -> ExtractResponse:
+#     """Robust YouTube extraction trying yt-dlp first, then Invidious fallback."""
+#     # 1. Try yt-dlp
+#     try:
+#         info = await _extract_info(url)
+#         formats = _build_formats(info, "youtube")
+#         uploader = info.get("uploader") or info.get("channel") or info.get("creator")
+#         title = info.get("title", "YouTube Video")
+#         thumbnail = info.get("thumbnail")
+#         return ExtractResponse(
+#             success=True,
+#             platform="youtube",
+#             title=title,
+#             author=uploader,
+#             thumbnail=thumbnail,
+#             duration=_format_duration(info.get("duration")),
+#             original_url=url,
+#             formats=formats,
+#         )
+#     except Exception as ytdl_err:
+#         logger.warning("yt-dlp failed on YouTube, trying Invidious fallback: %s", ytdl_err)
 
-    # 2. Invidious fallback
-    invidious_res = await _extract_invidious(url)
-    if invidious_res:
-        return invidious_res
+#     # 2. Invidious fallback
+#     invidious_res = await _extract_invidious(url)
+#     if invidious_res:
+#         return invidious_res
 
-    raise HTTPException(
-        status_code=422,
-        detail="Maaf, media ini sementara belum dapat diproses. Silakan pastikan tautan sudah benar dan publik atau coba sesaat lagi.",
-    )
+#     raise HTTPException(
+#         status_code=422,
+#         detail="Maaf, media ini sementara belum dapat diproses. Silakan pastikan tautan sudah benar dan publik atau coba sesaat lagi.",
+#     )
+
 
 # ---------------------------------------------------------------------------
 # API Routes
 # ---------------------------------------------------------------------------
-
-@app.get("/api/debug-download")
-async def debug_download(url: str):
-    import subprocess
-    ffmpeg_exe = _get_ffmpeg_path()
-    if not url.startswith("mux:"):
-        return {"error": "url must start with mux:"}
-    parts = url[4:].split("|")
-    v_stream = parts[0]
-    a_stream = parts[1] if len(parts) > 1 else None
-    ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-    cmd = [ffmpeg_exe, "-y", "-user_agent", ua, "-i", v_stream]
-    if a_stream:
-        cmd.extend(["-user_agent", ua, "-i", a_stream, "-c:v", "copy", "-c:a", "aac"])
-    temp_dir = tempfile.mkdtemp()
-    out = os.path.join(temp_dir, "test.mp4")
-    cmd.extend(["-t", "2", out])
-    p = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    return {
-        "ffmpeg": ffmpeg_exe,
-        "returncode": p.returncode,
-        "stderr": p.stderr.decode("utf-8", errors="ignore")[-1000:],
-    }
 
 @app.get("/health")
 async def health_check():
@@ -823,7 +801,7 @@ async def health_check():
     return {
         "status": "ok",
         "service": "AnySaveVid API",
-        "version": "2026_download_fix",
+        "version": "2026_stable_ig_tiktok_fb",
         "ytdlp": getattr(getattr(yt_dlp, "version", None), "__version__", "unknown")
     }
 
@@ -840,14 +818,13 @@ async def extract_media(payload: ExtractRequest):
     if not detected_platform:
         raise HTTPException(
             status_code=400,
-            detail="Tautan tidak didukung. Hanya Instagram, TikTok, YouTube, dan Facebook yang didukung.",
+            detail="Tautan tidak didukung. Hanya Instagram, TikTok, dan Facebook yang didukung.",
         )
 
     if payload.platform and payload.platform.lower() != detected_platform:
         platform_names = {
             "instagram": "Instagram",
             "tiktok": "TikTok",
-            "youtube": "YouTube",
             "facebook": "Facebook",
         }
         tab_name = platform_names.get(payload.platform.lower(), payload.platform)
@@ -863,11 +840,11 @@ async def extract_media(payload: ExtractRequest):
     if detected_platform == "tiktok":
         return await _extract_tiktok(url)
 
-    # Dedicated YouTube pipeline
-    if detected_platform == "youtube":
-        return await _extract_youtube(url)
+    # Dedicated YouTube pipeline (Disabled)
+    # if detected_platform == "youtube":
+    #     return await _extract_youtube(url)
 
-    # Instagram and YouTube pipeline via yt dlp
+    # Instagram and Facebook pipeline via yt-dlp
     info = await _extract_info(url)
     formats = _build_formats(info, detected_platform)
 
