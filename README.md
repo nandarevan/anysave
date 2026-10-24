@@ -1,4 +1,4 @@
-# AnySave
+# AnySaveVid
 
 **All-in-One watermark-free media downloader** — download videos, reels, shorts, posts, audio, and images from **Instagram**, **TikTok**, and **YouTube** instantly.
 
@@ -69,7 +69,7 @@ The app will be available at `http://localhost:5173`.
 
 | Variable           | Description                              | Default                                                            |
 | ------------------ | ---------------------------------------- | ------------------------------------------------------------------ |
-| `ALLOWED_ORIGINS`  | Comma-separated list of allowed origins  | `http://localhost:5173,http://localhost:3000,https://anysave.vercel.app` |
+| `ALLOWED_ORIGINS`  | Comma-separated list of allowed origins  | `http://localhost:5173,http://localhost:3000,https://anysavevid.vercel.app` |
 
 ---
 
@@ -82,7 +82,7 @@ The app will be available at `http://localhost:5173`.
 3. Set **Root Directory** to `frontend`.
 4. Set **Framework Preset** to `Vite`.
 5. Add environment variable:
-   - `VITE_API_BASE_URL` = your Render backend URL (e.g., `https://anysave-api.onrender.com`)
+   - `VITE_API_BASE_URL` = your Render backend URL (e.g., `https://anysavevid-backend.onrender.com`)
 6. Deploy.
 
 ### Backend → Render
@@ -93,7 +93,7 @@ The app will be available at `http://localhost:5173`.
 4. **Build Command**: `pip install -r requirements.txt`
 5. **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
 6. Add environment variable:
-   - `ALLOWED_ORIGINS` = your Vercel frontend URL (e.g., `https://anysave.vercel.app`)
+   - `ALLOWED_ORIGINS` = your Vercel frontend URL (e.g., `https://anysavevid.vercel.app`)
 7. Deploy.
 
 > **Note:** Render's free tier may cold-start after inactivity. The first request may take ~30 seconds.
@@ -137,7 +137,7 @@ Proxy download a media file with a clean filename.
 
 ### `GET /health`
 
-Returns `{ "status": "ok", "service": "AnySave API" }`.
+Returns `{ "status": "ok", "service": "AnySaveVid API" }`.
 
 ---
 

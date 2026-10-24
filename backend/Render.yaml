@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: anysave-api
+    name: anysavevid-backend
     runtime: python
     region: oregon
     plan: free
@@ -10,5 +10,5 @@ services:
       - key: PYTHON_VERSION
         value: "3.11.0"
       - key: ALLOWED_ORIGINS
-        value: "https://anysave.vercel.app"
+        value: "https://anysavevid.vercel.app"
     healthCheckPath: /health

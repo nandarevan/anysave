@@ -17,7 +17,7 @@ export default function Navbar({
 
   const [dark, setDark] = useState(() => {
     if (typeof window === "undefined") return false;
-    const stored = localStorage.getItem("anysave-theme");
+    const stored = localStorage.getItem("anysavevid-theme") || localStorage.getItem("anysave-theme");
     if (stored) return stored === "dark";
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
@@ -26,10 +26,10 @@ export default function Navbar({
     const root = document.documentElement;
     if (dark) {
       root.classList.add("dark");
-      localStorage.setItem("anysave-theme", "dark");
+      localStorage.setItem("anysavevid-theme", "dark");
     } else {
       root.classList.remove("dark");
-      localStorage.setItem("anysave-theme", "light");
+      localStorage.setItem("anysavevid-theme", "light");
     }
   }, [dark]);
 
@@ -47,12 +47,12 @@ export default function Navbar({
           <div className="flex h-9 w-9 items-center justify-center transition-transform group-hover:scale-105">
             <img
               src="/images/logo_icon.png"
-              alt="AnySave Logo"
+              alt="AnySaveVid Logo"
               className="h-full w-full object-contain drop-shadow-sm"
             />
           </div>
           <span className="text-xl font-bold tracking-tight text-slate-800 dark:text-white">
-            Any<span className="text-ocean-500">Save</span>
+            Any<span className="text-ocean-500">SaveVid</span>
           </span>
         </a>
 

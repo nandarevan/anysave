@@ -110,7 +110,7 @@ export default function Footer() {
             <div className="flex h-11 w-11 shrink-0 items-center justify-center transition-transform hover:scale-105">
               <img
                 src="/images/logo_icon.png"
-                alt="AnySave Logo"
+                alt="AnySaveVid Logo"
                 className="h-full w-full object-contain drop-shadow-sm"
               />
             </div>
@@ -140,7 +140,7 @@ export default function Footer() {
         {/* 4. Bottom Row: Exact Copyright, Policy Links, and Ke Atas Button */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200/80 dark:border-slate-800 pt-6 text-xs text-slate-500 dark:text-slate-400">
           <p className="text-center sm:text-left">
-            &copy; 2026 AnySave. {t.footer.createdBy}{" "}
+            &copy; 2026 AnySaveVid. {t.footer.createdBy}{" "}
             <span className="font-semibold text-slate-800 dark:text-slate-200">
               Nanda Revan Saputro
             </span>

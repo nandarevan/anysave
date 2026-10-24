@@ -148,12 +148,12 @@ export const translations: Record<Language, Translations> = {
     },
     modal: {
       title: "Sedang Memproses Unduhan Media",
-      connecting: "AnySave sedang menghubungkan...",
-      serverProcessing: "AnySave sedang menyiapkan media...",
-      receiving: "AnySave sedang mengunduh berkas...",
+      connecting: "AnySaveVid sedang menghubungkan...",
+      serverProcessing: "AnySaveVid sedang menyiapkan media...",
+      receiving: "AnySaveVid sedang mengunduh berkas...",
       downloadingPercent: (p) => `Mengunduh berkas (${p}%)...`,
       complete: "Selesai! Menyimpan berkas ke perangkat...",
-      note: "AnySave sedang menyiapkan media Anda. Jendela ini tertutup otomatis saat selesai.",
+      note: "AnySaveVid sedang menyiapkan media Anda. Jendela ini tertutup otomatis saat selesai.",
       cancel: "Batalkan Unduhan",
       error: "Gagal mengunduh media. Silakan coba lagi.",
     },
@@ -202,9 +202,9 @@ export const translations: Record<Language, Translations> = {
         "Akses Cepat di Semua Browser",
       ],
       disclaimer:
-        "AnySave tidak menyimpan berkas apa pun di server kami. Seluruh konten media diunduh langsung dari server CDN resmi masing masing platform.",
-      copyright: "AnySave. Seluruh Hak Cipta Dilindungi.",
-      bannerTitle: "AnySave: Platform Pengunduh Media Multi Platform Lengkap",
+        "AnySaveVid tidak menyimpan berkas apa pun di server kami. Seluruh konten media diunduh langsung dari server CDN resmi masing masing platform.",
+      copyright: "AnySaveVid. Seluruh Hak Cipta Dilindungi.",
+      bannerTitle: "AnySaveVid: Platform Pengunduh Media Multi Platform Lengkap",
       bannerDesc:
         "Toolkit online gratis untuk mengunduh video, audio, reels, shorts, dan gambar dari Instagram, TikTok, dan YouTube langsung berkualitas tinggi tanpa watermark.",
       badgePrivate: "100% Privat",
@@ -270,12 +270,12 @@ export const translations: Record<Language, Translations> = {
     },
     modal: {
       title: "Processing Media Download",
-      connecting: "AnySave is connecting...",
-      serverProcessing: "AnySave is preparing media...",
-      receiving: "AnySave is downloading file...",
+      connecting: "AnySaveVid is connecting...",
+      serverProcessing: "AnySaveVid is preparing media...",
+      receiving: "AnySaveVid is downloading file...",
       downloadingPercent: (p) => `Downloading file (${p}%)...`,
       complete: "Done! Saving file to your device...",
-      note: "AnySave is preparing your media. This window closes automatically when done.",
+      note: "AnySaveVid is preparing your media. This window closes automatically when done.",
       cancel: "Cancel Download",
       error: "Failed to download media. Please try again.",
     },
@@ -324,9 +324,9 @@ export const translations: Record<Language, Translations> = {
         "Fast Access on All Browsers",
       ],
       disclaimer:
-        "AnySave does not host or store any files on our servers. All media content is streamed directly from official platform CDN servers.",
-      copyright: "AnySave. All Rights Reserved.",
-      bannerTitle: "AnySave: All in One Multi Platform Media Downloader",
+        "AnySaveVid does not host or store any files on our servers. All media content is streamed directly from official platform CDN servers.",
+      copyright: "AnySaveVid. All Rights Reserved.",
+      bannerTitle: "AnySaveVid: All in One Multi Platform Media Downloader",
       bannerDesc:
         "Free online toolkit to download high quality watermark free videos, audio, reels, shorts, and photos from Instagram, TikTok, and YouTube.",
       badgePrivate: "100% Private",
@@ -353,7 +353,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>(() => {
     if (typeof window === "undefined") return "id";
-    const saved = localStorage.getItem("anysave-lang") as Language | null;
+    const saved = (localStorage.getItem("anysavevid-lang") || localStorage.getItem("anysave-lang")) as Language | null;
     if (saved === "id" || saved === "en") return saved;
 
     // Automatic detection: if user browser language is outside Indonesia, default to English
@@ -366,7 +366,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const setLang = (newLang: Language) => {
     setLangState(newLang);
-    localStorage.setItem("anysave-lang", newLang);
+    localStorage.setItem("anysavevid-lang", newLang);
     document.documentElement.lang = newLang;
   };
 

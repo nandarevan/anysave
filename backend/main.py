@@ -1,5 +1,5 @@
 """
-AnySave Backend: FastAPI + yt-dlp Media Extraction API
+AnySaveVid Backend: FastAPI + yt-dlp Media Extraction API
 Supports YouTube, Instagram, and TikTok media downloads tanpa watermark
 """
 
@@ -106,13 +106,13 @@ from pydantic import BaseModel, field_validator
 # Logging
 # ---------------------------------------------------------------------------
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("anysave")
+logger = logging.getLogger("anysavevid")
 
 # ---------------------------------------------------------------------------
 # FastAPI App
 # ---------------------------------------------------------------------------
 app = FastAPI(
-    title="AnySave API",
+    title="AnySaveVid API",
     description="Media downloader lengkap tanpa watermark API",
     version="1.0.0",
 )
@@ -122,7 +122,7 @@ app = FastAPI(
 # ---------------------------------------------------------------------------
 ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS",
-    "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,https://anysave.vercel.app",
+    "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,https://anysavevid.vercel.app",
 ).split(",")
 
 app.add_middleware(
@@ -603,7 +603,7 @@ async def _extract_tiktok(url: str) -> ExtractResponse:
 @app.get("/health")
 async def health_check():
     """Health check endpoint for Render."""
-    return {"status": "ok", "service": "AnySave API"}
+    return {"status": "ok", "service": "AnySaveVid API"}
 
 
 @app.post("/api/extract", response_model=ExtractResponse)
@@ -682,7 +682,7 @@ async def extract_media(payload: ExtractRequest):
 async def download_media(
     url: str,
     format_type: str = "video",
-    filename: str = "anysave_media",
+    filename: str = "anysavevid_media",
     ext: str = "mp4",
 ):
     """
@@ -695,7 +695,7 @@ async def download_media(
 
     clean_filename = re.sub(r'[^\w\s.]', '', filename).strip()
     if not clean_filename:
-        clean_filename = f"anysave_media.{ext}"
+        clean_filename = f"anysavevid_media.{ext}"
     if not clean_filename.endswith(f".{ext}"):
         clean_filename = f"{clean_filename}.{ext}"
 
@@ -744,7 +744,7 @@ async def download_media(
         )
 
     # For YouTube and non direct streams: use yt dlp + ffmpeg to generate complete valid media
-    temp_dir = tempfile.mkdtemp(prefix="anysave_")
+    temp_dir = tempfile.mkdtemp(prefix="anysavevid_")
     out_tmpl = os.path.join(temp_dir, "media.%(ext)s")
 
     try:

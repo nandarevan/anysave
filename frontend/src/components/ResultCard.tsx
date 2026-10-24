@@ -98,7 +98,7 @@ export default function ResultCard({ result, apiBase }: ResultCardProps) {
     setDownloadingIndex(idx);
 
     const safeTitle = result.title.replace(/[^\w\s]/g, "").trim().slice(0, 60);
-    const filename = `${safeTitle || "anysave_media"}.${fmt.ext}`;
+    const filename = `${safeTitle || "anysavevid_media"}.${fmt.ext}`;
 
     const downloadTargetUrl =
       fmt.url || (fmt.format_type === "image" ? result.thumbnail || "" : result.original_url);
