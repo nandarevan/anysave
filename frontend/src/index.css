@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── Design Tokens ──────────────────────────────────────────────── */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Ocean Blue palette */
+  --color-ocean-50: oklch(0.97 0.015 230);
+  --color-ocean-100: oklch(0.93 0.03 230);
+  --color-ocean-200: oklch(0.87 0.06 230);
+  --color-ocean-300: oklch(0.78 0.09 230);
+  --color-ocean-400: oklch(0.68 0.13 230);
+  --color-ocean-500: oklch(0.59 0.16 235);
+  --color-ocean-600: oklch(0.50 0.17 240);
+  --color-ocean-700: oklch(0.43 0.16 245);
+  --color-ocean-800: oklch(0.37 0.13 245);
+  --color-ocean-900: oklch(0.30 0.10 245);
+}
+
+/* ─── Base layer ─────────────────────────────────────────────────── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+    transition-duration: 250ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply font-sans text-slate-800 bg-slate-50;
+  }
+
+  /* Dark mode overrides (class-based) */
+  .dark body,
+  .dark {
+    @apply text-slate-100;
+  }
+
+  .dark body {
+    background-color: oklch(0.15 0.01 250);
+  }
+}
+
+/* ─── Utility classes ────────────────────────────────────────────── */
+@utility glass {
+  backdrop-filter: blur(16px) saturate(1.8);
+  -webkit-backdrop-filter: blur(16px) saturate(1.8);
+}
+
+@utility glass-light {
+  background: rgba(255, 255, 255, 0.72);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+@utility glass-dark {
+  background: rgba(15, 23, 42, 0.75);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+/* ─── Animations ─────────────────────────────────────────────────── */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 oklch(0.59 0.16 235 / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px 6px oklch(0.59 0.16 235 / 0.15);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@utility animate-fade-in-up {
+  animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@utility animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+@utility animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 25%,
+    oklch(0.87 0.06 230 / 0.3) 50%,
+    transparent 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: oklch(0.7 0.03 250 / 0.4);
+  border-radius: 99px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: oklch(0.4 0.03 250 / 0.5);
+}
