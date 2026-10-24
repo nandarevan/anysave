@@ -7,6 +7,7 @@ import type { ExtractResult } from "./components/ResultCard";
 import type { PlatformType } from "./components/PlatformTabs";
 import Footer from "./components/Footer";
 import { useLanguage } from "./context/LanguageContext";
+import { Analytics } from "@vercel/analytics/react";
 
 const API_BASE =
   import.meta.env.VITE_API_BASE_URL ||
@@ -92,6 +93,7 @@ export default function App() {
       </main>
 
       <Footer />
+      <Analytics />
     </div>
   );
 }
