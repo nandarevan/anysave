@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Sun, Moon, Globe } from "lucide-react";
 import type { PlatformType } from "./PlatformTabs";
-import { InstagramIcon, TikTokIcon, YouTubeIcon } from "./PlatformTabs";
+import { InstagramIcon, TikTokIcon, YouTubeIcon, FacebookIcon } from "./PlatformTabs";
 import { useLanguage } from "../context/LanguageContext";
 
 interface NavbarProps {
@@ -37,6 +37,7 @@ export default function Navbar({
     { id: "instagram", name: t.platforms.instagram.name, icon: InstagramIcon },
     { id: "tiktok", name: t.platforms.tiktok.name, icon: TikTokIcon },
     { id: "youtube", name: t.platforms.youtube.name, icon: YouTubeIcon },
+    { id: "facebook", name: t.platforms.facebook.name, icon: FacebookIcon },
   ];
 
   return (

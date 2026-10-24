@@ -1,6 +1,6 @@
 import { useLanguage } from "../context/LanguageContext";
 
-export type PlatformType = "instagram" | "tiktok" | "youtube";
+export type PlatformType = "instagram" | "tiktok" | "youtube" | "facebook";
 
 interface PlatformTabsProps {
   activePlatform: PlatformType;
@@ -28,6 +28,14 @@ export function YouTubeIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+    </svg>
+  );
+}
+
+export function FacebookIcon({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
     </svg>
   );
 }
@@ -78,6 +86,17 @@ export const PLATFORM_INFO: Record<
     icon: YouTubeIcon,
     supportedItems: ["Video MP4 HD (1080p)", "YouTube Shorts", "Audio MP3"],
   },
+  facebook: {
+    name: "Facebook",
+    badge: "Video & Reels",
+    tagline: "Download Video Facebook HD, Reels & Postingan",
+    placeholder: "Tempel tautan Facebook (Video, Reels, atau Postingan)...",
+    accentClass: "from-blue-600 via-blue-700 to-indigo-800",
+    activeTabClass:
+      "border-blue-600 bg-blue-600/10 text-blue-600 dark:text-blue-400 shadow-blue-600/10 shadow-lg",
+    icon: FacebookIcon,
+    supportedItems: ["Video Facebook HD", "Facebook Reels", "Postingan Publik"],
+  },
 };
 
 export default function PlatformTabs({
@@ -86,12 +105,12 @@ export default function PlatformTabs({
   disabled = false,
 }: PlatformTabsProps) {
   const { t } = useLanguage();
-  const platforms: PlatformType[] = ["instagram", "tiktok", "youtube"];
+  const platforms: PlatformType[] = ["instagram", "tiktok", "youtube", "facebook"];
 
   return (
     <div className="w-full">
       {/* 3 Platform Menu Tabs */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-3 rounded-2xl bg-slate-100/80 dark:bg-slate-800/60 p-1.5 sm:p-2 border border-slate-200/80 dark:border-slate-700/60 shadow-inner">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 rounded-2xl bg-slate-100/80 dark:bg-slate-800/60 p-1.5 sm:p-2 border border-slate-200/80 dark:border-slate-700/60 shadow-inner">
         {platforms.map((key) => {
           const config = PLATFORM_INFO[key];
           const platformI18n = t.platforms[key];
@@ -115,7 +134,9 @@ export default function PlatformTabs({
                       ? "bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white shadow-sm"
                       : key === "tiktok"
                         ? "bg-black text-cyan-400 dark:bg-slate-900 border border-cyan-500/30 shadow-sm"
-                        : "bg-red-600 text-white shadow-sm"
+                        : key === "youtube"
+                        ? "bg-red-600 text-white shadow-sm"
+                        : "bg-blue-600 text-white shadow-sm"
                     : "text-slate-500 dark:text-slate-400"
                   }`}
               >

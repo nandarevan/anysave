@@ -28,6 +28,7 @@ export function detectUrlPlatform(url: string): PlatformType | null {
   if (clean.includes("instagram.com")) return "instagram";
   if (clean.includes("tiktok.com")) return "tiktok";
   if (clean.includes("youtube.com") || clean.includes("youtu.be")) return "youtube";
+  if (clean.includes("facebook.com") || clean.includes("fb.watch") || clean.includes("fb.com")) return "facebook";
   return null;
 }
 
@@ -196,7 +197,9 @@ export default function DownloaderInput({
               ? "from-pink-500 via-rose-500 to-amber-500 shadow-pink-500/25 hover:shadow-pink-500/35"
               : activePlatform === "tiktok"
               ? "from-cyan-500 to-teal-600 shadow-cyan-500/25 hover:shadow-cyan-500/35"
-              : "from-red-500 to-red-600 shadow-red-500/25 hover:shadow-red-500/35"
+              : activePlatform === "youtube"
+              ? "from-red-500 to-red-600 shadow-red-500/25 hover:shadow-red-500/35"
+              : "from-blue-600 to-indigo-700 shadow-blue-500/25 hover:shadow-blue-500/35"
           }`}
         >
           {loading ? (

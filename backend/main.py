@@ -156,6 +156,14 @@ SUPPORTED_DOMAINS = {
         "vm.tiktok.com",
         "vt.tiktok.com",
     ],
+    "facebook": [
+        "facebook.com",
+        "www.facebook.com",
+        "m.facebook.com",
+        "fb.watch",
+        "fb.com",
+        "web.facebook.com",
+    ],
 }
 
 
@@ -254,7 +262,8 @@ def _sync_extract(url: str) -> dict:
         "ffmpeg_location": ffmpeg_exe,
         "extractor_args": {
             "youtube": {
-                "player_client": ["visionos", "android"]
+                "player_client": ["android"],
+                "player_skip": ["webpage", "configs"],
             }
         },
     }
@@ -426,7 +435,8 @@ def _sync_download_video(url: str, output_template: str):
         "merge_output_format": "mp4",
         "extractor_args": {
             "youtube": {
-                "player_client": ["visionos", "android"]
+                "player_client": ["android"],
+                "player_skip": ["webpage", "configs"],
             }
         },
     }
@@ -446,7 +456,8 @@ def _sync_download_audio(url: str, output_template: str):
         "outtmpl": output_template,
         "extractor_args": {
             "youtube": {
-                "player_client": ["visionos", "android"]
+                "player_client": ["android"],
+                "player_skip": ["webpage", "configs"],
             }
         },
         "postprocessors": [
@@ -651,7 +662,7 @@ async def extract_media(payload: ExtractRequest):
     if not detected_platform:
         raise HTTPException(
             status_code=400,
-            detail="Tautan tidak didukung. Hanya Instagram, TikTok, dan YouTube yang didukung.",
+            detail="Tautan tidak didukung. Hanya Instagram, TikTok, YouTube, dan Facebook yang didukung.",
         )
 
     if payload.platform and payload.platform.lower() != detected_platform:
@@ -659,6 +670,7 @@ async def extract_media(payload: ExtractRequest):
             "instagram": "Instagram",
             "tiktok": "TikTok",
             "youtube": "YouTube",
+            "facebook": "Facebook",
         }
         tab_name = platform_names.get(payload.platform.lower(), payload.platform)
         detected_name = platform_names.get(detected_platform, detected_platform)

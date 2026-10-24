@@ -37,6 +37,13 @@ export interface Translations {
       placeholder: string;
       supported: string[];
     };
+    facebook: {
+      name: string;
+      badge: string;
+      tagline: string;
+      placeholder: string;
+      supported: string[];
+    };
   };
   input: {
     paste: string;
@@ -130,6 +137,13 @@ export const translations: Record<Language, Translations> = {
         tagline: "Download Video YouTube HD, Shorts & Audio MP3",
         placeholder: "Tempel tautan YouTube (Video atau Shorts)...",
         supported: ["Video MP4 HD (1080p)", "YouTube Shorts", "Audio MP3"],
+      },
+      facebook: {
+        name: "Facebook",
+        badge: "Video & Reels",
+        tagline: "Download Video Facebook HD, Reels & Postingan",
+        placeholder: "Tempel tautan Facebook (Video, Reels, atau Postingan)...",
+        supported: ["Video Facebook HD", "Facebook Reels", "Postingan Publik"],
       },
     },
     input: {
@@ -252,6 +266,13 @@ export const translations: Record<Language, Translations> = {
         tagline: "Download HD YouTube Videos, Shorts & MP3 Audio",
         placeholder: "Paste YouTube link (Video or Shorts)...",
         supported: ["HD MP4 Video (1080p)", "YouTube Shorts", "MP3 Audio"],
+      },
+      facebook: {
+        name: "Facebook",
+        badge: "Video & Reels",
+        tagline: "Download Facebook HD Videos, Reels & Posts",
+        placeholder: "Paste Facebook link (Video, Reels, or Post)...",
+        supported: ["HD Facebook Video", "Facebook Reels", "Public Posts"],
       },
     },
     input: {
