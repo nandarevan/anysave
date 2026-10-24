@@ -792,6 +792,30 @@ async def _extract_youtube(url: str) -> ExtractResponse:
 # ---------------------------------------------------------------------------
 # API Routes
 # ---------------------------------------------------------------------------
+
+@app.get("/api/debug-download")
+async def debug_download(url: str):
+    import subprocess
+    ffmpeg_exe = _get_ffmpeg_path()
+    if not url.startswith("mux:"):
+        return {"error": "url must start with mux:"}
+    parts = url[4:].split("|")
+    v_stream = parts[0]
+    a_stream = parts[1] if len(parts) > 1 else None
+    ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    cmd = [ffmpeg_exe, "-y", "-user_agent", ua, "-i", v_stream]
+    if a_stream:
+        cmd.extend(["-user_agent", ua, "-i", a_stream, "-c:v", "copy", "-c:a", "aac"])
+    temp_dir = tempfile.mkdtemp()
+    out = os.path.join(temp_dir, "test.mp4")
+    cmd.extend(["-t", "2", out])
+    p = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    return {
+        "ffmpeg": ffmpeg_exe,
+        "returncode": p.returncode,
+        "stderr": p.stderr.decode("utf-8", errors="ignore")[-1000:],
+    }
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint for Render."""
@@ -939,7 +963,7 @@ async def download_media(
         except Exception as e:
             shutil.rmtree(temp_dir, ignore_errors=True)
             logger.exception("Error during video muxing")
-            raise HTTPException(status_code=500, detail="Gagal memproses video YouTube.")
+            raise HTTPException(status_code=500, detail=f"Gagal memproses video: {str(e)[:300]}")
 
     # Handle Invidious audio conversion to MP3
     if url.startswith("audio:"):
