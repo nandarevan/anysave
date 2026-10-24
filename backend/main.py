@@ -289,21 +289,23 @@ async def _extract_info(url: str) -> dict:
                 detail="Konten tidak ditemukan atau telah dihapus oleh pemiliknya.",
             )
 
-        # Clean ANSI escape codes from error messages
+        # Clean, friendly user notification without technical jargon
         clean_msg = re.sub(r"\x1b\[[0-9;]*m", "", err_msg)
-        clean_msg = re.sub(r"\[[0-9;]*m", "", clean_msg).strip()
-        if "no video" in clean_msg.lower():
-            clean_msg = "Tidak ditemukan media video atau foto pada postingan ini."
+        clean_msg = re.sub(r"\[[0-9;]*m", "", clean_msg).strip().lower()
+        if "no video" in clean_msg:
+            detail_msg = "Tidak ditemukan media video atau foto pada postingan ini."
+        else:
+            detail_msg = "Maaf, media ini sementara belum dapat diproses. Silakan pastikan tautan sudah benar dan publik atau coba sesaat lagi."
 
         raise HTTPException(
             status_code=422,
-            detail=f"Tidak dapat memproses media: {clean_msg[:120]}",
+            detail=detail_msg,
         )
     except Exception as e:
         logger.exception("Unexpected error extracting media")
         raise HTTPException(
             status_code=500,
-            detail="Terjadi kesalahan saat memproses tautan media.",
+            detail="Maaf, server sedang sibuk memproses antrean. Silakan coba kembali dalam beberapa detik.",
         )
 
 

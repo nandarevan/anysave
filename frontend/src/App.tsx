@@ -49,13 +49,33 @@ export default function App() {
         if (err instanceof TypeError && err.message.includes("fetch")) {
           setError(
             lang === "id"
-              ? "Gagal menghubungi server backend. Pastikan backend sudah berjalan di port 8000."
-              : "Failed to reach backend server. Please make sure backend is running on port 8000.",
+              ? "Maaf, server sedang bersiap atau sedang memproses antrean. Silakan coba kembali dalam beberapa detik."
+              : "Sorry, the server is warming up or busy. Please try again in a few seconds.",
           );
         } else if (err instanceof Error) {
-          setError(err.message);
+          let msg = err.message;
+          // Filter out technical jargon, github urls, yt-dlp errors, ports
+          if (
+            msg.includes("github") ||
+            msg.includes("yt-") ||
+            msg.includes("port") ||
+            msg.includes("player response") ||
+            msg.includes("Failed to") ||
+            msg.includes("Traceback") ||
+            msg.includes("Internal Server Error")
+          ) {
+            msg =
+              lang === "id"
+                ? "Maaf, media ini sementara belum dapat diproses. Silakan pastikan tautan dapat dibuka publik atau coba sesaat lagi."
+                : "Sorry, this media cannot be processed right now. Please make sure the link is public or try again shortly.";
+          }
+          setError(msg);
         } else {
-          setError(lang === "id" ? "Terjadi kesalahan yang tidak terduga." : "An unexpected error occurred.");
+          setError(
+            lang === "id"
+              ? "Maaf, terjadi kendala saat memproses media. Silakan coba lagi nanti."
+              : "Sorry, an issue occurred while processing media. Please try again later.",
+          );
         }
       } finally {
         setLoading(false);
