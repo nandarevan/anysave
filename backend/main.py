@@ -799,7 +799,7 @@ async def health_check():
     return {
         "status": "ok",
         "service": "AnySaveVid API",
-        "version": "2026_youtube_resilient",
+        "version": "2026_download_fix",
         "ytdlp": getattr(getattr(yt_dlp, "version", None), "__version__", "unknown")
     }
 
@@ -893,7 +893,7 @@ async def download_media(
     For direct CDN streams: streams video, audio, or image directly.
     For YouTube or complex streams: uses yt dlp and ffmpeg to mux standard MP4 or MP3.
     """
-    if not url.startswith(("http://", "https://")):
+    if not url.startswith(("http://", "https://", "mux:", "audio:")):
         raise HTTPException(status_code=400, detail="URL tidak valid")
 
     clean_filename = re.sub(r'[^\w\s.]', '', filename).strip()
@@ -912,9 +912,10 @@ async def download_media(
         target_file = os.path.join(temp_dir, clean_filename)
         ffmpeg_exe = _get_ffmpeg_path() or "ffmpeg"
 
-        cmd = [ffmpeg_exe, "-y", "-i", v_stream]
+        ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+        cmd = [ffmpeg_exe, "-y", "-user_agent", ua, "-i", v_stream]
         if a_stream:
-            cmd.extend(["-i", a_stream, "-c:v", "copy", "-c:a", "aac"])
+            cmd.extend(["-user_agent", ua, "-i", a_stream, "-c:v", "copy", "-c:a", "aac"])
         else:
             cmd.extend(["-c:v", "copy"])
         cmd.extend(["-movflags", "+faststart", target_file])
@@ -947,7 +948,8 @@ async def download_media(
         target_file = os.path.join(temp_dir, clean_filename)
         ffmpeg_exe = _get_ffmpeg_path() or "ffmpeg"
 
-        cmd = [ffmpeg_exe, "-y", "-i", a_stream, "-vn", "-c:a", "libmp3lame", "-q:a", "2", target_file]
+        ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+        cmd = [ffmpeg_exe, "-y", "-user_agent", ua, "-i", a_stream, "-vn", "-c:a", "libmp3lame", "-q:a", "2", target_file]
 
         def run_audio():
             p = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
