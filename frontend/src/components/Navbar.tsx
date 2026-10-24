@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sun, Moon, Download, Globe } from "lucide-react";
+import { Sun, Moon, Globe } from "lucide-react";
 import type { PlatformType } from "./PlatformTabs";
 import { InstagramIcon, TikTokIcon, YouTubeIcon } from "./PlatformTabs";
 import { useLanguage } from "../context/LanguageContext";
@@ -43,9 +43,13 @@ export default function Navbar({
     <header className="fixed top-0 inset-x-0 z-50 glass glass-light dark:glass-dark">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-ocean-500 to-ocean-700 shadow-lg shadow-ocean-500/25 transition-transform group-hover:scale-105">
-            <Download className="h-4.5 w-4.5 text-white" strokeWidth={2.5} />
+        <a href="/" className="flex items-center gap-2.5 group">
+          <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800 shadow-md shadow-ocean-500/15 transition-transform group-hover:scale-105 p-1">
+            <img
+              src="/images/logo_icon.png"
+              alt="AnySave Logo"
+              className="h-full w-full object-contain"
+            />
           </div>
           <span className="text-xl font-bold tracking-tight text-slate-800 dark:text-white">
             Any<span className="text-ocean-500">Save</span>

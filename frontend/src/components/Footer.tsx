@@ -1,4 +1,4 @@
-import { ShieldCheck, Zap, CheckCircle2, ArrowUp, Download } from "lucide-react";
+import { ShieldCheck, Zap, CheckCircle2, ArrowUp } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 
 export default function Footer() {
@@ -107,8 +107,12 @@ export default function Footer() {
         {/* 3. Banner Card: Platform Information & Feature Badges */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800/90 p-5 sm:p-6 shadow-sm">
           <div className="flex items-center gap-4">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-rose-500 to-rose-700 text-white font-extrabold shadow-md shadow-rose-500/20">
-              <Download className="h-5 w-5" strokeWidth={2.5} />
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800 p-1 shadow-md shadow-rose-500/10">
+              <img
+                src="/images/logo_icon.png"
+                alt="AnySave Logo"
+                className="h-full w-full object-contain"
+              />
             </div>
             <div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white">
