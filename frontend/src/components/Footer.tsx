@@ -107,11 +107,11 @@ export default function Footer() {
         {/* 3. Banner Card: Platform Information & Feature Badges */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800/90 p-5 sm:p-6 shadow-sm">
           <div className="flex items-center gap-4">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800 p-1 shadow-md shadow-rose-500/10">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center transition-transform hover:scale-105">
               <img
                 src="/images/logo_icon.png"
                 alt="AnySave Logo"
-                className="h-full w-full object-contain"
+                className="h-full w-full object-contain drop-shadow-sm"
               />
             </div>
             <div>

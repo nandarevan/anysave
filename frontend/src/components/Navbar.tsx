@@ -44,11 +44,11 @@ export default function Navbar({
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5">
         {/* Logo */}
         <a href="/" className="flex items-center gap-2.5 group">
-          <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800 shadow-md shadow-ocean-500/15 transition-transform group-hover:scale-105 p-1">
+          <div className="flex h-9 w-9 items-center justify-center transition-transform group-hover:scale-105">
             <img
               src="/images/logo_icon.png"
               alt="AnySave Logo"
-              className="h-full w-full object-contain"
+              className="h-full w-full object-contain drop-shadow-sm"
             />
           </div>
           <span className="text-xl font-bold tracking-tight text-slate-800 dark:text-white">
