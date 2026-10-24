@@ -1,4 +1,4 @@
-import { ArrowDown, Sparkles } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 
 export default function HeroSection() {
@@ -15,8 +15,7 @@ export default function HeroSection() {
 
       <div className="mx-auto max-w-3xl px-5 text-center animate-fade-in-up">
         {/* Badge */}
-        <div className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-ocean-200 dark:border-ocean-800 bg-ocean-50 dark:bg-ocean-900/40 px-4 py-1.5 text-xs font-semibold text-ocean-600 dark:text-ocean-300">
-          <Sparkles className="h-3.5 w-3.5" />
+        <div className="mb-6 inline-flex items-center rounded-full border border-ocean-200 dark:border-ocean-800 bg-ocean-50 dark:bg-ocean-900/40 px-4 py-1.5 text-xs font-semibold text-ocean-600 dark:text-ocean-300">
           {lang === "id" ? "100% Gratis dan Tanpa Watermark" : "100% Free and Without Watermark"}
         </div>
 
