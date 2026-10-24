@@ -6,32 +6,6 @@ Built with **React 19 + TypeScript + Tailwind CSS** (frontend) and **Python Fast
 
 ---
 
-## 📂 Project Structure
-
-```text
-anysave/
-├── frontend/          # React + Vite + TypeScript + Tailwind CSS
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Navbar.tsx
-│   │   │   ├── HeroSection.tsx
-│   │   │   ├── DownloaderInput.tsx
-│   │   │   ├── ResultCard.tsx
-│   │   │   └── Footer.tsx
-│   │   ├── App.tsx
-│   │   ├── main.tsx
-│   │   └── index.css
-│   ├── vercel.json
-│   └── package.json
-├── backend/
-│   ├── main.py         # FastAPI application
-│   ├── requirements.txt
-│   └── Render.yaml     # Render deployment config
-└── README.md
-```
-
----
-
 ## 🚀 Local Development
 
 ### Prerequisites
